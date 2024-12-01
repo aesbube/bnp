@@ -1,0 +1,24 @@
+1. π(Title)(σ(Name='Sci-Fi')((Movies) ⋈ (Genres)))
+
+2. People<-(Persons) ⋈ (PersonsMovies)
+Movies_<-σ(Runtime<120 or Runtime>180)(Movies)
+People_Movies<-(People) ⋈ (Movies_)
+π(Title)(σ(Firstname='James' and Lastname='Cameron')(People_Movies))
+
+3.Action_Genre<-σ(Name='Action')(Genres)
+Sequels<-π(SequelOf)(σ(SequelOf!=null)(Movies))
+Final<-(π(Movie_ID)((Movies) ⋈ (Action_Genre))) ∩ (π(Movie_ID)((Sequels) ⋈_(Sequels.SequelOf = Movies.Movie_ID)(Movies)))
+(Movies) ⋈ (Final)
+
+4. Најди ги сите филмови со времетраење помало од 120 минути на кои учествувале Joss Whedon и Chris Buck.
+People<-σ(Firstname='Joss' and Lastname='Wheadon' or Firstname='Chris' and Lastname='Buck')(Persons)
+Sequels<-σ(Runtime<120)(Movies)
+Final<-π(Title)((Sequels) ⋈ ((PersonsMovies) ⋈ (People)))
+(Movies) ⋈ (Final)
+
+5. Најди ги сите продукциски куќи (Distribution) кои направиле филмови само од жанрот Sci-Fi.
+Sci_Fi<-σ(Name='Sci-Fi')((Movies) ⋈ (Genres))
+Sci_Fi_D<-π(Distribution)(Sci_Fi)
+All1<-(Movies) ⋈ (Genres)
+Non_scifi<-π(Distribution)((All1) - (Sci_Fi))
+(Sci_Fi_D) - (Non_scifi)
